@@ -1,6 +1,7 @@
 @import "./variables";
-// @import "~noty/src/noty.scss";
-// @import "~noty/src/themes/mint.scss";
+@import "~noty/src/noty.scss";
+@import "~noty/src/themes/mint.scss";
+
 body {
   font-family: "Lato", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,7 +35,6 @@ section.hero {
   transition: $smooth;
   &:hover {
     background: $primary;
-    border-color: $pure;
     color: $pure;
   }
   &:focus {
@@ -50,13 +50,14 @@ section.hero {
 }
 section.cart {
   background: $secondary;
+  min-height: calc(100vh - 86px);
   .amount {
     color: $primary;
   }
 }
 section.login {
   background: $secondary;
-  min-height: calc(100vh-86px);
+  min-height: calc(100vh - 86px);
   a {
     color: $primary;
     &:hover {
@@ -73,7 +74,7 @@ a.link {
 }
 section.status {
   background: $secondary;
-  min-height: calc(100vh-86px);
+  min-height: calc(100vh - 86px);
 }
 .status-box {
   padding: 60px 0 0;
