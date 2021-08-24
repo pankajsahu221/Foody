@@ -38,3 +38,11 @@ addToCart.forEach(btn => {
     updateCart(food); //add the food to the cart
   });
 });
+
+//Remove alert message after x seconds
+const alertMsg = document.querySelector("#success-alert");
+if (alertMsg) {
+  setTimeout(() => {
+    alertMsg.remove();
+  }, 2000);
+}

@@ -1,4 +1,4 @@
-const User = require("../models/user.model.js");
+const User = require("../../models/user.model.js");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -80,7 +80,7 @@ exports.loginUser = (req, res, next) => {
           req.flash("error", info.message);
           return next(err);
         }
-        return res.redirect("/");
+        return res.redirect("/customer/orders");
       });
     })(req, res, next);
   } catch (e) {
