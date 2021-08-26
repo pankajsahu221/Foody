@@ -14,8 +14,12 @@ const {
 const {
   addOrder
 } = require("../app/controllers/customers/order.controller.js");
+const {
+  updateStatus
+} = require("../app/controllers/admin/adminstatus.controller.js");
 const guest = require("../app/middlewares/guest.js");
 const auth = require("../app/middlewares/auth.js");
+const admin = require("../app/middlewares/admin.js");
 
 route.get("/", async (req, res) => {
   try {
@@ -59,7 +63,29 @@ route.get("/customer/orders", auth, async (req, res) => {
   }
 });
 
-route.get("/admin/orders", async (req, res) => {
+route.get("/customer/orders/:id", auth, async (req, res) => {
+  try {
+    await Order.findOne({ _id: req.params.id }, (err, foundOrder) => {
+      // check if the order we are looking for, has been created by the loggedIn user.
+
+      if (
+        foundOrder &&
+        foundOrder.customerId.toString() === req.user._id.toString()
+      ) {
+        return res.render("customers/singleOrder", {
+          order: foundOrder
+        });
+      }
+      return res.redirect("/");
+    });
+  } catch (e) {
+    console.log(e);
+    res.redirect("/");
+  }
+});
+
+// admin
+route.get("/admin/orders", admin, async (req, res) => {
   try {
     const orders = await Order.find({ status: { $ne: "completed" } }, null, {
       sort: { createdAt: -1 }
@@ -67,12 +93,26 @@ route.get("/admin/orders", async (req, res) => {
       .populate("customerId", "-password")
       .lean();
 
-    res.render("admin/orders");
+    // when we need all the data
+    if (req.xhr) {
+      return res.json(orders);
+    }
+
+    // when we want to render the views
+    return res.render("admin/orders");
   } catch (e) {
     console.log(e);
     res.redirect("/");
   }
 });
+
+// route.get("/admin/order/status", admin, (req, res) => {
+//   try {
+//   } catch (e) {
+//     console.log(e);
+//     res.redirect("/");
+//   }
+// });
 
 ////////// API  /////////
 
@@ -90,5 +130,8 @@ route.post("/logout", logoutUser);
 
 // place an order
 route.post("/orders/add", auth, addOrder);
+
+// update status
+route.post("/admin/order/status", admin, updateStatus);
 
 module.exports = route;

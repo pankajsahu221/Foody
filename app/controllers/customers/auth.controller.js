@@ -38,7 +38,7 @@ exports.registerUser = async (req, res) => {
     // saving user data to the db
     await User.create(newUser, (err, data) => {
       if (data) {
-        return res.redirect("/");
+        return res.redirect("/login");
       } else {
         console.log(err);
         req.flash("error", "Something went wrong");
@@ -63,6 +63,10 @@ exports.loginUser = (req, res, next) => {
       return res.redirect("/login");
     }
 
+    const _getRedirectUrl = req => {
+      return req.user.role === "admin" ? "/admin/orders" : "/customer/orders";
+    };
+
     passport.authenticate("local", (err, user, info) => {
       // if there is any error
       if (err) {
@@ -80,7 +84,7 @@ exports.loginUser = (req, res, next) => {
           req.flash("error", info.message);
           return next(err);
         }
-        return res.redirect("/customer/orders");
+        return res.redirect(_getRedirectUrl(req));
       });
     })(req, res, next);
   } catch (e) {

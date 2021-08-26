@@ -20,9 +20,18 @@ exports.addOrder = async (req, res) => {
       req.flash("error", "Something went wrong");
       return res.redirect("/cart");
     } else {
-      req.flash("success", "Order placed succesfully");
-      delete req.session.cart; //remove items from cart after placing the order
-      return res.redirect("/customer/orders");
+      Order.populate(data, { path: "customerId" }, (err, populatedData) => {
+        if (populatedData) {
+          req.flash("success", "Order placed succesfully");
+          delete req.session.cart; //remove items from cart after placing the order
+
+          // Emit event
+          const eventEmitter = req.app.get("eventEmitter");
+          eventEmitter.emit("orderPlaced", populatedData);
+
+          return res.redirect("/customer/orders");
+        }
+      });
     }
   });
 };
