@@ -287,6 +287,13 @@ body {
   height: 45px;
 }
 
+.cartlogo {
+  -o-object-fit: contain;
+     object-fit: contain;
+  min-height: 20px;
+  min-width: 20px;
+}
+
 nav li:last-child a {
   background: #fe5f1e;
 }
@@ -475,5 +482,9 @@ section.status {
 @media (max-width: 768px) {
   .status-box ul li span:before {
     font-size: 34px;
+  }
+
+  .navlinks li {
+    margin-left: 10px;
   }
 }
