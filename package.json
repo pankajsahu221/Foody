@@ -4,6 +4,7 @@
   "description": "This is realtime food ordering app",
   "main": "index.js",
   "scripts": {
+    "heroku-postbuild": "npm install && npm run build",
     "start": "node server.js",
     "serve": "node server.js",
     "dev": "nodemon server.js",
