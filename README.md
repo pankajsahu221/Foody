@@ -1,4 +1,4 @@
-## Foody- A Realtiem food ordering app built using Node.js, Express, ejs, MongoDb for database.
+## Foody- A Realtime food ordering app built using Node.js, Express, ejs, MongoDb for database.
 
 - User can login/signup(Full User Authentication using passport).
 - User can add items to cart and place orders(Cookies and sessions - Used Database to store session).
