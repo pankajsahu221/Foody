@@ -17,6 +17,10 @@ const {
 const {
   updateStatus
 } = require("../app/controllers/admin/adminstatus.controller.js");
+const {
+  getSearchData
+} = require("../app/controllers/customers/search.controller.js");
+
 const guest = require("../app/middlewares/guest.js");
 const auth = require("../app/middlewares/auth.js");
 const admin = require("../app/middlewares/admin.js");
@@ -106,13 +110,9 @@ route.get("/admin/orders", admin, async (req, res) => {
   }
 });
 
-// route.get("/admin/order/status", admin, (req, res) => {
-//   try {
-//   } catch (e) {
-//     console.log(e);
-//     res.redirect("/");
-//   }
-// });
+route.get("/search", (req, res) => {
+  res.render("search");
+});
 
 ////////// API  /////////
 
@@ -133,5 +133,8 @@ route.post("/orders/add", auth, addOrder);
 
 // update status
 route.post("/admin/order/status", admin, updateStatus);
+
+// search
+route.post("/search/:inpval", getSearchData);
 
 module.exports = route;

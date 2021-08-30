@@ -32,8 +32,19 @@
       </div>
       <div>
         <ul class="flex items-center navlinks">
-          <li class="ml-6"><a href="/">Menu</a></li>
+          <li class="ml-6">
+            <a href="/search"><i class="las la-search la-lg"></i></a>
+          </li>
           <% if(user) { %>
+
+          <li class="ml-6">
+            <% if( user.role == 'admin') { %>
+            <a href="/admin/orders"> Orders</a>
+            <% }else{%>
+            <a href="/customer/orders"> Orders</a>
+            <%}%>
+          </li>
+
           <li class="ml-6">
             <form id="logout" action="/logout" method="POST">
               <a onclick="document.getElementById('logout').submit()" href="#"

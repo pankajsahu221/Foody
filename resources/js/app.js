@@ -117,3 +117,58 @@ socket.on("orderUpdated", data => {
 });
 
 updateStatus(order);
+
+function searchpagefunc() {
+  const searchform = document.querySelector(".searchform");
+  const searchresultdiv = document.querySelector(".searchresultdiv");
+  let foodmarkup;
+
+  //   fetch API to get data based no input value
+  searchform.addEventListener("submit", e => {
+    e.preventDefault();
+    let inputvalue = e.target.searchinp.value;
+
+    if (inputvalue != null) {
+      fetch(`search/${inputvalue}`, {
+        method: "POST"
+      })
+        .then(response => response.json())
+        .then(data => {
+          foodmarkup = generateFoodMarkup(data);
+          searchresultdiv.innerHTML = foodmarkup;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  });
+
+  //   to generate to markup for foods to store and show in frontend
+  function generateFoodMarkup(foods) {
+    return foods
+      .map(food => {
+        return `<div class="w-full md:w-64">
+        <img class="h-40 mb-4 mx-auto" src="/img/${food.image}" alt="" />
+        <div class="text-center">
+          <h2 class="mb-4 text-lg">${food.name}</h2>
+          <span class="size py-1 px-4 rounded-full uppercase text-xs"
+            >${food.size}</span
+          >
+          <div class="flex items-center justify-around mt-6">
+            <span class="font-bold text-lg">Rs.${food.price}</span>
+            <button
+              data-food="${JSON.stringify(food)}"
+              class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold"
+            >
+              <span>+</span>
+              <span class="ml-4">Add</span>
+            </button>
+          </div>
+        </div>
+      </div>`;
+      })
+      .join("");
+  }
+}
+
+searchpagefunc();

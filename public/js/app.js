@@ -2033,6 +2033,38 @@ socket.on("orderUpdated", function (data) {
 });
 updateStatus(order);
 
+function searchpagefunc() {
+  var searchform = document.querySelector(".searchform");
+  var searchresultdiv = document.querySelector(".searchresultdiv");
+  var foodmarkup; //   fetch API to get data based no input value
+
+  searchform.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var inputvalue = e.target.searchinp.value;
+
+    if (inputvalue != null) {
+      fetch("search/".concat(inputvalue), {
+        method: "POST"
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        foodmarkup = generateFoodMarkup(data);
+        searchresultdiv.innerHTML = foodmarkup;
+      })["catch"](function (error) {
+        console.error(error);
+      });
+    }
+  }); //   to generate to markup for foods to store and show in frontend
+
+  function generateFoodMarkup(foods) {
+    return foods.map(function (food) {
+      return "<div class=\"w-full md:w-64\">\n        <img class=\"h-40 mb-4 mx-auto\" src=\"/img/".concat(food.image, "\" alt=\"\" />\n        <div class=\"text-center\">\n          <h2 class=\"mb-4 text-lg\">").concat(food.name, "</h2>\n          <span class=\"size py-1 px-4 rounded-full uppercase text-xs\"\n            >").concat(food.size, "</span\n          >\n          <div class=\"flex items-center justify-around mt-6\">\n            <span class=\"font-bold text-lg\">Rs.").concat(food.price, "</span>\n            <button\n              data-food=\"").concat(JSON.stringify(food), "\"\n              class=\"add-to-cart py-1 px-6 rounded-full flex items-center font-bold\"\n            >\n              <span>+</span>\n              <span class=\"ml-4\">Add</span>\n            </button>\n          </div>\n        </div>\n      </div>");
+    }).join("");
+  }
+}
+
+searchpagefunc();
+
 /***/ }),
 
 /***/ "./resources/scss/app.scss":
@@ -26947,12 +26979,14 @@ process.umask = function() { return 0; };
 /******/ 			// add "moreModules" to the modules object,
 /******/ 			// then flag all "chunkIds" as loaded and fire callback
 /******/ 			var moduleId, chunkId, i = 0;
-/******/ 			for(moduleId in moreModules) {
-/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
 /******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
 /******/ 			}
-/******/ 			if(runtime) var result = runtime(__webpack_require__);
 /******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
 /******/ 			for(;i < chunkIds.length; i++) {
 /******/ 				chunkId = chunkIds[i];

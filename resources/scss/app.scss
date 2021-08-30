@@ -53,6 +53,7 @@ section.hero {
     background: $primary-hover;
   }
 }
+
 section.cart {
   background: $secondary;
   min-height: calc(100vh - 86px);
@@ -178,6 +179,54 @@ section.status {
   float: right;
   font-size: 14px;
   margin-top: 8px;
+}
+
+// searchpage
+.searchpage {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 86px);
+}
+.searchpageinp {
+  display: flex;
+  align-items: center;
+}
+.searchpageinp form {
+  height: 45px;
+  width: 80vmin;
+  min-width: 4rem;
+  overflow: hidden;
+  border-radius: 0.4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+}
+.searchpageinp input {
+  background: $secondary;
+  color: black;
+  font-size: 1.1rem;
+  padding: 0.4rem;
+  padding-left: 8px;
+  height: 100%;
+  width: 90%;
+  border: none;
+  outline: none;
+}
+.searchpageinp button {
+  color: black;
+  background: $secondary;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  height: 100%;
+  padding-right: 8px;
+  transition: all 0.35s ease;
+}
+.searchpageinp button:hover {
+  color: rgb(221, 17, 17);
+  transition: all 0.35s ease;
 }
 
 @media (max-width: 1060px) {
