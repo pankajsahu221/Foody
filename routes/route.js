@@ -12,7 +12,8 @@ const {
   logoutUser
 } = require("../app/controllers/customers/auth.controller.js");
 const {
-  addOrder
+  addOrder,
+  cancelOrder
 } = require("../app/controllers/customers/order.controller.js");
 const {
   updateStatus
@@ -130,6 +131,9 @@ route.post("/logout", logoutUser);
 
 // place an order
 route.post("/orders/add", auth, addOrder);
+
+// cancel and order
+route.post("/orders/cancel/:id", auth, cancelOrder);
 
 // update status
 route.post("/admin/order/status", admin, updateStatus);

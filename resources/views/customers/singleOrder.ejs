@@ -1,16 +1,27 @@
 <section class="status">
   <div class="container mx-auto">
     <div class="status-box w-full lg:w-2/3 mx-auto">
-      <div class="flex items-center justify-between mb-12">
+      <div class="flex items-center justify-between mb-3">
         <h1 class="text-xl font-bold">Track delivery status</h1>
         <h6 class="bg-white py-1 rounded-full px-4 text-green-600 text-xs">
           <%= order._id %>
         </h6>
+
         <input
           id="hiddenInput"
           type="hidden"
           value="<%= JSON.stringify(order) %>"
         />
+      </div>
+      <div class="flex justify-end mb-12">
+        <% if(order.status !== "delivered" && order.status !== "completed"){ %>
+        <h6
+          class="cancel-order-btn bg-white py-1 rounded-full px-4 text-red-600 text-xs cursor-pointer"
+          data-id="<%= JSON.stringify(order._id) %>"
+        >
+          Cancel order
+        </h6>
+        <% } %>
       </div>
       <ul>
         <li
@@ -41,3 +52,23 @@
     </div>
   </div>
 </section>
+<script>
+  // cancel order functionality
+  const cancelOrderBtn = document.querySelector(".cancel-order-btn");
+  cancelOrderBtn.addEventListener("click", e => {
+    const orderId = JSON.parse(e.target.dataset.id);
+
+    fetch(`/orders/cancel/${orderId}`, {
+      method: "POST"
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        window.location.href = "/customer/orders";
+      })
+      .catch(error => {
+        console.error(error);
+        window.location.href = "/customer/orders";
+      });
+  });
+</script>

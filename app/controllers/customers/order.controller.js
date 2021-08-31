@@ -35,3 +35,27 @@ exports.addOrder = async (req, res) => {
     }
   });
 };
+
+exports.cancelOrder = async (req, res) => {
+  const orderId = req.params.id;
+  let foundAndVerified = false;
+
+  // finding the order and then verifing the customer of order and the logged in user
+  await Order.findOne({ _id: orderId }, async (err, foundOrder) => {
+    if (
+      foundOrder &&
+      foundOrder.customerId.toString() === req.user._id.toString()
+    ) {
+      foundAndVerified = true;
+    }
+  });
+
+  // if verified, then delete
+  if (foundAndVerified) {
+    await Order.deleteOne({ _id: orderId }, (err, data) => {
+      if (data) {
+        return res.redirect("/customer/orders");
+      }
+    });
+  }
+};

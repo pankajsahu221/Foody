@@ -468,6 +468,10 @@ section.status {
   margin-top: 8px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .searchpage {
   display: flex;
   flex-direction: column;
