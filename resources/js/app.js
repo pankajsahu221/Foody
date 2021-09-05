@@ -1,6 +1,7 @@
 import axios from "axios";
 import Noty from "noty";
 import { initAdmin } from "./admin";
+import { initStripe } from "./stripe";
 import moment from "moment";
 
 let addToCart = document.querySelectorAll(".add-to-cart");
@@ -118,30 +119,36 @@ socket.on("orderUpdated", data => {
 
 updateStatus(order);
 
+// for order
+initStripe();
+
+// searchpage starts
 function searchpagefunc() {
   const searchform = document.querySelector(".searchform");
   const searchresultdiv = document.querySelector(".searchresultdiv");
   let foodmarkup;
 
-  //   fetch API to get data based no input value
-  searchform.addEventListener("submit", e => {
-    e.preventDefault();
-    let inputvalue = e.target.searchinp.value;
+  if (searchform) {
+    //   fetch API to get data based no input value
+    searchform.addEventListener("submit", e => {
+      e.preventDefault();
+      let inputvalue = e.target.searchinp.value;
 
-    if (inputvalue != null) {
-      fetch(`search/${inputvalue}`, {
-        method: "POST"
-      })
-        .then(response => response.json())
-        .then(data => {
-          foodmarkup = generateFoodMarkup(data);
-          searchresultdiv.innerHTML = foodmarkup;
+      if (inputvalue != null) {
+        fetch(`search/${inputvalue}`, {
+          method: "POST"
         })
-        .catch(error => {
-          console.error(error);
-        });
-    }
-  });
+          .then(response => response.json())
+          .then(data => {
+            foodmarkup = generateFoodMarkup(data);
+            searchresultdiv.innerHTML = foodmarkup;
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    });
+  }
 
   //   to generate to markup for foods to store and show in frontend
   function generateFoodMarkup(foods) {
@@ -172,3 +179,4 @@ function searchpagefunc() {
 }
 
 searchpagefunc();
+// searchpage ends
