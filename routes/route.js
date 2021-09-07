@@ -4,7 +4,8 @@ const moment = require("moment");
 const Menu = require("../app/models/menu.model.js");
 const Order = require("../app/models/order.model.js");
 const {
-  updateCart
+  updateCart,
+  removeItemFromCart
 } = require("../app/controllers/customers/cart.controller.js");
 const {
   registerUser,
@@ -119,6 +120,9 @@ route.get("/search", (req, res) => {
 
 // add item to cart
 route.post("/update-cart", updateCart);
+
+// remove item from cart
+route.post("/remove-cart", removeItemFromCart);
 
 // register user
 route.post("/register", guest, registerUser);

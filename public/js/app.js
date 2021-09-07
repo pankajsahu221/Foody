@@ -2269,6 +2269,46 @@ function searchpagefunc() {
 }
 
 searchpagefunc(); // searchpage ends
+// REMOVE items from cart starts
+
+function cartDeleteFunc() {
+  var deleteBtns = document.querySelectorAll(".deletebtn");
+  var pizzaList = document.querySelector(".pizza-list");
+  deleteBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      var foodItem = JSON.parse(e.target.dataset.item);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/remove-cart", foodItem).then(function (res) {
+        // console.log(res.data.cartItems);
+        cartCounter.innerText = res.data.totalQty;
+        pizzaList.innerHTML = generateCartMarkup(Object.values(res.data.cartItems)); //   to show a popup
+
+        new (noty__WEBPACK_IMPORTED_MODULE_1___default())({
+          text: "Item removed from cart",
+          type: "success",
+          timeout: 1000,
+          progressBar: false
+        }).show();
+      })["catch"](function (e) {
+        console.log(e); //   to show a popup
+
+        new (noty__WEBPACK_IMPORTED_MODULE_1___default())({
+          text: "Something went wrong",
+          type: "error",
+          timeout: 1000,
+          progressBar: false
+        }).show();
+      });
+    });
+  });
+
+  function generateCartMarkup(cartItems) {
+    return cartItems.map(function (food) {
+      return "\n      <div class=\"cartitem flex items-center my-8\">\n        <img class=\"w-24\" src=\"/img/".concat(food.item.image, "\" alt=\"\" />\n        <div class=\"flex-1 ml-4\">\n          <h1>").concat(food.item.name, "</h1>\n          <span>").concat(food.item.size, "</span>\n        </div>\n        <span class=\"flex-1\">").concat(food.qty, " Pcs</span>\n        <span class=\"font-bold text-lg\"\n          >Rs. ").concat(Number(food.item.price) * Number(food.qty), "</span\n        >\n\n        <i\n          class=\"deletebtn las la-times\"\n          data-item=\"").concat(JSON.stringify(food.item), "\"\n        ></i>\n      </div>");
+    }).join("");
+  }
+}
+
+cartDeleteFunc(); // REMOVE items from cart ends
 
 /***/ }),
 

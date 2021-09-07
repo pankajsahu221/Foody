@@ -180,3 +180,71 @@ function searchpagefunc() {
 
 searchpagefunc();
 // searchpage ends
+
+// REMOVE items from cart starts
+function cartDeleteFunc() {
+  const deleteBtns = document.querySelectorAll(".deletebtn");
+  const pizzaList = document.querySelector(".pizza-list");
+
+  deleteBtns.forEach(btn => {
+    btn.addEventListener("click", e => {
+      let foodItem = JSON.parse(e.target.dataset.item);
+
+      axios
+        .post("/remove-cart", foodItem)
+        .then(res => {
+          // console.log(res.data.cartItems);
+
+          cartCounter.innerText = res.data.totalQty;
+
+          pizzaList.innerHTML = generateCartMarkup(
+            Object.values(res.data.cartItems)
+          );
+          //   to show a popup
+          new Noty({
+            text: "Item removed from cart",
+            type: "success",
+            timeout: 1000,
+            progressBar: false
+          }).show();
+        })
+        .catch(e => {
+          console.log(e);
+          //   to show a popup
+          new Noty({
+            text: "Something went wrong",
+            type: "error",
+            timeout: 1000,
+            progressBar: false
+          }).show();
+        });
+    });
+  });
+
+  function generateCartMarkup(cartItems) {
+    return cartItems
+      .map(food => {
+        return `
+      <div class="cartitem flex items-center my-8">
+        <img class="w-24" src="/img/${food.item.image}" alt="" />
+        <div class="flex-1 ml-4">
+          <h1>${food.item.name}</h1>
+          <span>${food.item.size}</span>
+        </div>
+        <span class="flex-1">${food.qty} Pcs</span>
+        <span class="font-bold text-lg"
+          >Rs. ${Number(food.item.price) * Number(food.qty)}</span
+        >
+
+        <i
+          class="deletebtn las la-times"
+          data-item="${JSON.stringify(food.item)}"
+        ></i>
+      </div>`;
+      })
+      .join("");
+  }
+}
+cartDeleteFunc();
+
+// REMOVE items from cart ends

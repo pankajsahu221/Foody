@@ -50,3 +50,27 @@ exports.updateCart = (req, res) => {
     console.log(e);
   }
 };
+
+exports.removeItemFromCart = (req, res) => {
+  let cart = req.session.cart;
+  let foodItem = req.body;
+
+  if (cart.totalQty > 0) {
+    cart.totalPrice = Number(cart.totalPrice) - Number(foodItem.price);
+    cart.totalQty = Number(cart.totalQty) - 1;
+
+    if (cart.items[foodItem._id].qty == 1) {
+      delete cart.items[foodItem._id];
+    } else {
+      cart.items[foodItem._id].qty = Number(cart.items[foodItem._id].qty) - 1;
+    }
+
+    if (cart.totalQty == 0) {
+      delete req.session.cart;
+    }
+
+    let totalQty = cart ? cart.totalQty : 0;
+
+    return res.status(200).json({ totalQty: totalQty, cartItems: cart.items });
+  }
+};

@@ -254,6 +254,16 @@ section.status {
   }
 }
 
+.cartitem {
+  position: relative;
+}
+.cartitem .deletebtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
 .StripeElement {
   box-sizing: border-box;
   width: 50%;

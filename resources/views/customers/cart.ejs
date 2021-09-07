@@ -7,7 +7,7 @@
     </div>
     <div class="pizza-list">
       <% for(let food of Object.values(session.cart.items)) { %>
-      <div class="flex items-center my-8">
+      <div class="cartitem flex items-center my-8">
         <img class="w-24" src="/img/<%= food.item.image %>" alt="" />
         <div class="flex-1 ml-4">
           <h1><%= food.item.name %></h1>
@@ -17,6 +17,11 @@
         <span class="font-bold text-lg"
           >Rs. <%= food.item.price * food.qty %></span
         >
+
+        <i
+          class="deletebtn las la-times"
+          data-item="<%= JSON.stringify(food.item) %>"
+        ></i>
       </div>
       <% } %>
     </div>
@@ -73,7 +78,7 @@
             placeholder="Address"
           />
           <div class="mt-4">
-              <div id="card-element"></div>
+            <div id="card-element"></div>
             <button
               class="btn-primary px-6 py-2 rounded-full text-white font-bold mt-6 focus:outline-none focus:shadow-outline"
               type="submit"
