@@ -2279,8 +2279,10 @@ function cartDeleteFunc() {
       var foodItem = JSON.parse(e.target.dataset.item);
       axios__WEBPACK_IMPORTED_MODULE_0___default().post("/remove-cart", foodItem).then(function (res) {
         // console.log(res.data.cartItems);
-        cartCounter.innerText = res.data.totalQty;
-        pizzaList.innerHTML = generateCartMarkup(Object.values(res.data.cartItems)); //   to show a popup
+        cartCounter.innerText = res.data.totalQty; // pizzaList.innerHTML = generateCartMarkup(
+        //   Object.values(res.data.cartItems)
+        // );
+        //   to show a popup
 
         new (noty__WEBPACK_IMPORTED_MODULE_1___default())({
           text: "Item removed from cart",
@@ -2288,6 +2290,9 @@ function cartDeleteFunc() {
           timeout: 1000,
           progressBar: false
         }).show();
+        setTimeout(function () {
+          window.location.href = "/cart";
+        }, 1000);
       })["catch"](function (e) {
         console.log(e); //   to show a popup
 

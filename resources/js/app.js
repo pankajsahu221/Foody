@@ -197,9 +197,10 @@ function cartDeleteFunc() {
 
           cartCounter.innerText = res.data.totalQty;
 
-          pizzaList.innerHTML = generateCartMarkup(
-            Object.values(res.data.cartItems)
-          );
+          // pizzaList.innerHTML = generateCartMarkup(
+          //   Object.values(res.data.cartItems)
+          // );
+
           //   to show a popup
           new Noty({
             text: "Item removed from cart",
@@ -207,6 +208,10 @@ function cartDeleteFunc() {
             timeout: 1000,
             progressBar: false
           }).show();
+
+          setTimeout(() => {
+            window.location.href = "/cart";
+          }, 1000);
         })
         .catch(e => {
           console.log(e);
