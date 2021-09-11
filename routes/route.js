@@ -113,7 +113,7 @@ route.get("/admin/orders", admin, async (req, res) => {
   }
 });
 
-route.get("/admin/users", async (req, res) => {
+route.get("/admin/users", admin, async (req, res) => {
   const users = await User.find({ role: "customer" }).lean();
 
   // console.log(users);
