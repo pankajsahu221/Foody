@@ -6,6 +6,7 @@ import moment from "moment";
 
 let addToCart = document.querySelectorAll(".add-to-cart");
 let cartCounter = document.querySelector("#cartCounter");
+let amountCounter = document.querySelector("#amountCounter");
 
 function updateCart(food) {
   axios
@@ -140,8 +141,48 @@ function searchpagefunc() {
         })
           .then(response => response.json())
           .then(data => {
-            foodmarkup = generateFoodMarkup(data);
-            searchresultdiv.innerHTML = foodmarkup;
+            // console.log(data);
+
+            while (searchresultdiv.firstChild) {
+              searchresultdiv.removeChild(searchresultdiv.firstChild);
+            }
+
+            data.forEach(food => {
+              // console.log(food);
+
+              const child = document.createElement("div");
+
+              child.innerHTML = `<div class="w-full md:w-64">
+               <img class="h-40 mb-4 mx-auto" src="/img/${food.image}" alt="" />
+               <div class="text-center">
+                 <h2 class="mb-4 text-lg">${food.name}</h2>
+                 <span class="size py-1 px-4 rounded-full uppercase text-xs"
+                   >${food.size}</span
+                 >
+                 <div class="flex items-center justify-around mt-6">
+                   <span class="font-bold text-lg">Rs.${food.price}</span>
+                   <button
+                     data-food="${JSON.stringify(food)}"
+                     class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold"
+                   >
+                     <span>+</span>
+                     <span class="ml-4">Add</span>
+                   </button>
+                 </div>
+               </div>
+             </div>`;
+              searchresultdiv.appendChild(child);
+
+              const cbtn = child.querySelector(".add-to-cart");
+              cbtn.addEventListener("click", e => {
+                let foodData = JSON.parse(cbtn.dataset.food);
+                console.log(cbtn);
+                // updateCart(foodData); //add the food to the cart
+              });
+            });
+
+            // foodmarkup = generateFoodMarkup(data);
+            // searchresultdiv.innerHTML = foodmarkup;
           })
           .catch(error => {
             console.error(error);
@@ -190,12 +231,18 @@ function cartDeleteFunc() {
     btn.addEventListener("click", e => {
       let foodItem = JSON.parse(e.target.dataset.item);
 
+      let foodhtmlitem = e.target.parentNode;
+
       axios
         .post("/remove-cart", foodItem)
         .then(res => {
           // console.log(res.data.cartItems);
 
           cartCounter.innerText = res.data.totalQty;
+          amountCounter.innerText = res.data.totalPrice;
+
+          // remove item's div element from the pizza-list div element
+          pizzaList.removeChild(foodhtmlitem);
 
           // pizzaList.innerHTML = generateCartMarkup(
           //   Object.values(res.data.cartItems)
@@ -209,9 +256,11 @@ function cartDeleteFunc() {
             progressBar: false
           }).show();
 
-          setTimeout(() => {
-            window.location.href = "/cart";
-          }, 1000);
+          if (res.data.totalQty == 0) {
+            setTimeout(() => {
+              window.location.href = "/cart";
+            });
+          }
         })
         .catch(e => {
           console.log(e);

@@ -3,6 +3,7 @@ const route = express.Router();
 const moment = require("moment");
 const Menu = require("../app/models/menu.model.js");
 const Order = require("../app/models/order.model.js");
+const User = require("../app/models/user.model.js");
 const {
   updateCart,
   removeItemFromCart
@@ -110,6 +111,13 @@ route.get("/admin/orders", admin, async (req, res) => {
     console.log(e);
     res.redirect("/");
   }
+});
+
+route.get("/admin/users", async (req, res) => {
+  const users = await User.find({ role: "customer" }).lean();
+
+  // console.log(users);
+  res.render("admin/users", { users: users });
 });
 
 route.get("/search", (req, res) => {

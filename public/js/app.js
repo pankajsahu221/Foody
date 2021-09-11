@@ -2127,6 +2127,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var addToCart = document.querySelectorAll(".add-to-cart");
 var cartCounter = document.querySelector("#cartCounter");
+var amountCounter = document.querySelector("#amountCounter");
 
 function updateCart(food) {
   axios__WEBPACK_IMPORTED_MODULE_0___default().post("/update-cart", food).then(function (res) {
@@ -2251,8 +2252,23 @@ function searchpagefunc() {
         }).then(function (response) {
           return response.json();
         }).then(function (data) {
-          foodmarkup = generateFoodMarkup(data);
-          searchresultdiv.innerHTML = foodmarkup;
+          // console.log(data);
+          while (searchresultdiv.firstChild) {
+            searchresultdiv.removeChild(searchresultdiv.firstChild);
+          }
+
+          data.forEach(function (food) {
+            // console.log(food);
+            var child = document.createElement("div");
+            child.innerHTML = "<div class=\"w-full md:w-64\">\n               <img class=\"h-40 mb-4 mx-auto\" src=\"/img/".concat(food.image, "\" alt=\"\" />\n               <div class=\"text-center\">\n                 <h2 class=\"mb-4 text-lg\">").concat(food.name, "</h2>\n                 <span class=\"size py-1 px-4 rounded-full uppercase text-xs\"\n                   >").concat(food.size, "</span\n                 >\n                 <div class=\"flex items-center justify-around mt-6\">\n                   <span class=\"font-bold text-lg\">Rs.").concat(food.price, "</span>\n                   <button\n                     data-food=\"").concat(JSON.stringify(food), "\"\n                     class=\"add-to-cart py-1 px-6 rounded-full flex items-center font-bold\"\n                   >\n                     <span>+</span>\n                     <span class=\"ml-4\">Add</span>\n                   </button>\n                 </div>\n               </div>\n             </div>");
+            searchresultdiv.appendChild(child);
+            var cbtn = child.querySelector(".add-to-cart");
+            cbtn.addEventListener("click", function (e) {
+              var foodData = JSON.parse(cbtn.dataset.food);
+              console.log(cbtn); // updateCart(foodData); //add the food to the cart
+            });
+          }); // foodmarkup = generateFoodMarkup(data);
+          // searchresultdiv.innerHTML = foodmarkup;
         })["catch"](function (error) {
           console.error(error);
         });
@@ -2277,9 +2293,13 @@ function cartDeleteFunc() {
   deleteBtns.forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       var foodItem = JSON.parse(e.target.dataset.item);
+      var foodhtmlitem = e.target.parentNode;
       axios__WEBPACK_IMPORTED_MODULE_0___default().post("/remove-cart", foodItem).then(function (res) {
         // console.log(res.data.cartItems);
-        cartCounter.innerText = res.data.totalQty; // pizzaList.innerHTML = generateCartMarkup(
+        cartCounter.innerText = res.data.totalQty;
+        amountCounter.innerText = res.data.totalPrice; // remove item's div element from the pizza-list div element
+
+        pizzaList.removeChild(foodhtmlitem); // pizzaList.innerHTML = generateCartMarkup(
         //   Object.values(res.data.cartItems)
         // );
         //   to show a popup
@@ -2290,9 +2310,12 @@ function cartDeleteFunc() {
           timeout: 1000,
           progressBar: false
         }).show();
-        setTimeout(function () {
-          window.location.href = "/cart";
-        }, 1000);
+
+        if (res.data.totalQty == 0) {
+          setTimeout(function () {
+            window.location.href = "/cart";
+          });
+        }
       })["catch"](function (e) {
         console.log(e); //   to show a popup
 

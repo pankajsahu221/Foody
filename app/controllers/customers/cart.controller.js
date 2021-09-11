@@ -70,7 +70,12 @@ exports.removeItemFromCart = (req, res) => {
     }
 
     let totalQty = cart ? cart.totalQty : 0;
+    let totalPrice = cart ? cart.totalPrice : 0;
 
-    return res.status(200).json({ totalQty: totalQty, cartItems: cart.items });
+    return res.status(200).json({
+      totalQty: totalQty,
+      totalPrice: totalPrice,
+      cartItems: cart.items
+    });
   }
 };

@@ -1,0 +1,38 @@
+<section class="orders light-section">
+  <div class="container mx-auto pt-12">
+    <h1 class="font-bold text-lg mb-4">All Users</h1>
+
+    <table class="w-full table-auto bg-white">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 text-left">S No.</th>
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-left">Email</th>
+          <th class="px-4 py-2 text-left">User Id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(users.length) { %> <% users.forEach((user, index) => { %>
+        <tr>
+          <td class="border px-4 py-2">
+            <%= index + 1 %>
+          </td>
+          <td class="border px-4 py-2">
+            <%= user.name %>
+          </td>
+          <td class="border px-4 py-2">
+            <%= user.email %>
+          </td>
+          <td class="border px-4 py-2">
+            <%= user._id %>
+          </td>
+        </tr>
+        <% }) %> <% } else { %>
+        <tr>
+          <td class="p-4"><span>No Users found!</span></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
