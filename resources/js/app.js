@@ -302,3 +302,60 @@ function cartDeleteFunc() {
 cartDeleteFunc();
 
 // REMOVE items from cart ends
+
+// FILTER Order functionality starts
+function filterOrder() {
+  const filterOrderSelect = document.querySelector(".filterOrderSelect");
+  const customertablerow = document.querySelector(".customertablerow");
+  const customertablebody = document.querySelector(".customertablebody");
+
+  filterOrderSelect.addEventListener("change", e => {
+    e.preventDefault();
+    console.log(e.target.value);
+
+    axios
+      .post("/customer/order/filter", {
+        filterType: e.target.value
+      })
+      .then(res => {
+        console.log(res);
+
+        const filteredOrders = res.data;
+
+        // remove previous elements
+        while (customertablebody.firstChild) {
+          customertablebody.removeChild(customertablebody.firstChild);
+        }
+
+        filteredOrders.map(order => {
+          const child = document.createElement("tr");
+          child.classList.add("customertablerow");
+
+          child.innerHTML = `<td class="border px-4 py-2">
+          <a class="link" href="/customer/orders/${order._id}"
+            >${order._id}</a
+          >
+        </td>
+        <td class="border px-4 py-2">
+          ${order.phone} 
+        </td>
+        <td class="border px-4 py-2">
+        ${order.address}
+        </td>
+        <td class="border px-4 py-2">
+          ${moment(order.createdAt).format("hh:mm A")}
+        </td>
+        <td class="border px-4 py-2">Not Paid</td>`;
+
+          customertablebody.appendChild(child);
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  });
+}
+
+filterOrder();
+
+// FILTER Order functionality ends

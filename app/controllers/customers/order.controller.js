@@ -99,3 +99,26 @@ exports.cancelOrder = async (req, res) => {
     });
   }
 };
+
+exports.orderFilter = async (req, res) => {
+  const filterType = req.body.filterType;
+
+  let timeSpan = new Date();
+
+  if (filterType == "last24hours") {
+    timeSpan = 60 * 60 * 24 * 1000;
+  } else if (filterType == "last7days") {
+    timeSpan = 7 * 60 * 60 * 24 * 1000;
+  } else if (filterType == "last1month") {
+    timeSpan = 30 * 60 * 60 * 24 * 1000;
+  }
+
+  const orders = await Order.find({
+    customerId: req.user._id,
+    createdAt: {
+      $gte: new Date(new Date() - timeSpan)
+    }
+  }).lean();
+
+  res.json(orders);
+};

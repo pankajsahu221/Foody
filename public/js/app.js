@@ -2337,6 +2337,38 @@ function cartDeleteFunc() {
 }
 
 cartDeleteFunc(); // REMOVE items from cart ends
+// FILTER Order functionality starts
+
+function filterOrder() {
+  var filterOrderSelect = document.querySelector(".filterOrderSelect");
+  var customertablerow = document.querySelector(".customertablerow");
+  var customertablebody = document.querySelector(".customertablebody");
+  filterOrderSelect.addEventListener("change", function (e) {
+    e.preventDefault();
+    console.log(e.target.value);
+    axios__WEBPACK_IMPORTED_MODULE_0___default().post("/customer/order/filter", {
+      filterType: e.target.value
+    }).then(function (res) {
+      console.log(res);
+      var filteredOrders = res.data; // remove previous elements
+
+      while (customertablebody.firstChild) {
+        customertablebody.removeChild(customertablebody.firstChild);
+      }
+
+      filteredOrders.map(function (order) {
+        var child = document.createElement("tr");
+        child.classList.add("customertablerow");
+        child.innerHTML = "<td class=\"border px-4 py-2\">\n          <a class=\"link\" href=\"/customer/orders/".concat(order._id, "\"\n            >").concat(order._id, "</a\n          >\n        </td>\n        <td class=\"border px-4 py-2\">\n          ").concat(order.phone, " \n        </td>\n        <td class=\"border px-4 py-2\">\n        ").concat(order.address, "\n        </td>\n        <td class=\"border px-4 py-2\">\n          ").concat(moment__WEBPACK_IMPORTED_MODULE_4___default()(order.createdAt).format("hh:mm A"), "\n        </td>\n        <td class=\"border px-4 py-2\">Not Paid</td>");
+        customertablebody.appendChild(child);
+      });
+    })["catch"](function (e) {
+      console.log(e);
+    });
+  });
+}
+
+filterOrder(); // FILTER Order functionality ends
 
 /***/ }),
 
