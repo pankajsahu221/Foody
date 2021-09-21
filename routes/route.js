@@ -15,7 +15,8 @@ const {
 } = require("../app/controllers/customers/auth.controller.js");
 const {
   addOrder,
-  cancelOrder
+  cancelOrder,
+  orderFilter
 } = require("../app/controllers/customers/order.controller.js");
 const {
   updateStatus
@@ -152,5 +153,8 @@ route.post("/admin/order/status", admin, updateStatus);
 
 // search
 route.post("/search/:inpval", getSearchData);
+
+// customer order filter
+route.post("/customer/order/filter", orderFilter);
 
 module.exports = route;
