@@ -10,3 +10,9 @@
 Try it now.
 
 https://hazel-abstracted-library.glitch.me/
+
+![screenshot](https://github.com/pankajsahu221/Foody/blob/master/public/img/foodyshot.png)
+
+![screenshot](https://github.com/pankajsahu221/Foody/blob/master/public/img/foodyshot2.png)
+
+![screenshot](https://github.com/pankajsahu221/Foody/blob/master/public/img/foodyshot3.png)
